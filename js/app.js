@@ -106,19 +106,10 @@ Player.prototype.reset = function () {
     this.position.y = 9;
 };
 
-// Checks for collision with enemies
-Player.prototype.checkCollisions = function () {
-    var resp = false,
-        enemyWidth = 42;
-
-    for(var i = 0; i < allEnemies.length; i++){
-        if(this.x <= allEnemies[i].x + enemyWidth && this.x >= allEnemies[i].x - enemyWidth && this.position.y === allEnemies[i].yBasePosition){
-            resp = true;
-            break;
-        }
-    }
-
-    return resp;
+// Decrease the lives and the player position back to the inicial position
+Player.prototype.setCollision = function () {
+    this.lives--;
+    this.reset();
 };
 
 // Update the player's position, score and game level
@@ -127,15 +118,12 @@ Player.prototype.update = function() {
     this.y = this.position.y * yFactor;
     this.y = this.y <= 0 ?  -10 : this.y;
 
-    if(this.checkCollisions()){// If the plyer hit a enemy decrease life 
-        this.lives--;
-        this.reset();
-    }else if(this.position.y === yMin){ // if the player reached the water increase the score and level
+   if(this.position.y === yMin){ // if the player reached the water increase the score and level
         this.score += 100 * this.level;
         this.level++;
         addEnemy(this.level);
         this.reset();
-    }
+   }
 };
 
 //Handles the keyboard imputs

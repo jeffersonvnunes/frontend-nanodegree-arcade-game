@@ -77,9 +77,29 @@ var Engine = (function(global) {
      * functionality this way (you could just implement collision detection
      * on the entities themselves within your app.js file).
      */
+
+    // Checks for collision with enemies
+    function checkCollisions() {
+        var resp = false,
+            enemyWidth = 42;
+
+        for(var i = 0; i < allEnemies.length; i++){
+            if(player.x <= allEnemies[i].x + enemyWidth &&
+               player.x >= allEnemies[i].x - enemyWidth &&
+               player.position.y === allEnemies[i].yBasePosition){
+                resp = true;
+                break;
+            }
+        }
+
+        return resp;
+    }
+
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        if (checkCollisions()) {
+            player.setCollision();
+        }
     }
 
     /* This is called by the update function and loops through all of the
